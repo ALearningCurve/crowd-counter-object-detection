@@ -4,9 +4,10 @@
 CAMERA_URL = 'http://129.10.161.241/mjpg/video.mjpg'
 
 import cv2
-import numpy as np
-from datetime import datetime
-import imutils
+from datetime import datetime, timedelta
+from time import sleep
+from random import random
+import sys
 
 def captureFrame(): 
     cap = cv2.VideoCapture(CAMERA_URL)
@@ -14,55 +15,31 @@ def captureFrame():
         gotFrame, frame = cap.read()
         if gotFrame: 
             cap.release()
-            return frame
-    return frame
+            # the bottom 20ish pixels is a time stamp banner
+            return frame[:-20]
 
-def saveFrame():
-    frame = captureFrame()
-    # the bottom 20ish pixels is a time stamp banner
-    frame = frame[:-20] 
+def saveFrame(frame):
     filename = datetime.today().strftime('frames/%Y_%m_%d__%H_%M.jpg')
     cv2.imwrite(filename, frame)
+    return filename
 
-def readFrame():
-    frame = cv2.imread('frames/2023_07_11__18_40.jpg')
-    cv2.imshow("FRAME ", frame)
-  
-    # waits for user to press any key
-    # (this is necessary to avoid Python kernel form crashing)
-    cv2.waitKey(0)
-    # closing all open windows
-    cv2.destroyAllWindows()
 
-def drawBoxes(): 
-    # Initializing the HOG person
-    # detector
-    hog = cv2.HOGDescriptor()
-    hog.setSVMDetector(cv2.HOGDescriptor_getDefaultPeopleDetector())
-   
-    # Reading the Image
-    image = cv2.imread('frames/2023_07_11__18_40.jpg')
-    
-    # Resizing the Image
-    image = imutils.resize(image,
-                        width=min(400, image.shape[1]))
-    
-    # Detecting all the regions in the 
-    # Image that has a pedestrians inside it
-    (regions, _) = hog.detectMultiScale(image, 
-                                        winStride=(4, 4),
-                                        padding=(4, 4),
-                                        scale=1.05)
-    
-    # Drawing the regions in the Image
-    for (x, y, w, h) in regions:
-        cv2.rectangle(image, (x, y), 
-                    (x + w, y + h), 
-                    (0, 0, 255), 2)
-    
-    # Showing the output Image
-    cv2.imshow("Image", image)
-    cv2.waitKey(0)
-   
-cv2.destroyAllWindows()
-drawBoxes()
+def getManyFrames(delayMin, durationParameters):
+    delta = timedelta(**durationParameters)
+    desiredEnd = datetime.now() + delta
+    print("INFO:")
+    print(f"\tWill run for {delta}")
+    print(f"\tWill take a photo about every {delayMin} minutes")
+    print(f"\tLast capture will be taken at {desiredEnd}\n")
+    print("RUN TIME:")
+
+    while datetime.now() < desiredEnd:
+        frame = captureFrame()
+        filename = saveFrame(frame)
+        print(f"[ ] took a screenshot at {datetime.now()}, saved to {filename}")
+        # sleep for about 10 minutes
+        sleep(delayMin * 60 + random() * 60)
+
+if __name__ == "__main__":
+    kwargs = dict([(key, int(val)) for (key, val) in [arg.split('=') for arg in sys.argv[2:]]])
+    getManyFrames(int(sys.argv[1]), kwargs)
