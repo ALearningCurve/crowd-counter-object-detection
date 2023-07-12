@@ -8,6 +8,20 @@ from datetime import datetime, timedelta
 from time import sleep
 from random import random
 import sys
+import logging
+import os
+
+LOG_FILE = "./scraper.log"
+if os.path.isfile(LOG_FILE):
+    os.remove(LOG_FILE)
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s:%(levelname)s:%(message)s",
+    handlers=[
+        logging.FileHandler(LOG_FILE),
+        logging.StreamHandler()
+    ]
+)
 
 def captureFrame(): 
     cap = cv2.VideoCapture(CAMERA_URL)
@@ -27,19 +41,27 @@ def saveFrame(frame):
 def getManyFrames(delayMin, durationParameters):
     delta = timedelta(**durationParameters)
     desiredEnd = datetime.now() + delta
-    print("INFO:")
-    print(f"\tWill run for {delta}")
-    print(f"\tWill take a photo about every {delayMin} minutes")
-    print(f"\tLast capture will be taken at {desiredEnd}\n")
-    print("RUN TIME:")
-
+    logging.info(f"CONFIG: Will run for {delta}")
+    logging.info(f"CONFIG: Will take a photo about every {delayMin} minutes")
+    logging.info(f"CONFIG: Last capture will be taken at {desiredEnd}")
+    logging.info("NOW RUNNING")
     while datetime.now() < desiredEnd:
-        frame = captureFrame()
+        try:
+            frame = captureFrame()
+        except Exception as e:
+            # maybe because of wifi down for camera or for us (or for some other reason)
+            # getting the frame from the camera may fail
+            logging.error(f"error while getting frame. skipping this capture attempt. err={e}")
+            continue
         filename = saveFrame(frame)
-        print(f"[ ] took a screenshot at {datetime.now()}, saved to {filename}")
-        # sleep for about 10 minutes
-        sleep(delayMin * 60 + random() * 60)
+        logging.info(f"took a screenshot at {datetime.now()}, saved to {filename}")
+        # sleep with a random delay
+        nextDelay = delayMin * 60 + random() * 60 
+        sleep(nextDelay)
 
 if __name__ == "__main__":
-    kwargs = dict([(key, int(val)) for (key, val) in [arg.split('=') for arg in sys.argv[2:]]])
-    getManyFrames(int(sys.argv[1]), kwargs)
+    try:
+        kwargs = dict([(key, int(val)) for (key, val) in [arg.split('=') for arg in sys.argv[2:]]])
+        getManyFrames(int(sys.argv[1]), kwargs)
+    except Exception as e: 
+        logging.critical(e)
