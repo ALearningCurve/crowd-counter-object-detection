@@ -65,3 +65,4 @@ if __name__ == "__main__":
         getManyFrames(int(sys.argv[1]), kwargs)
     except Exception as e: 
         logging.critical(e)
+        raise e

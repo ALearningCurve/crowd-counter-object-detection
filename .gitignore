@@ -1,3 +1,5 @@
 env/
 frames/
 *.log
+deeplearning/protoc/*
+deeplearning/workspace/pre-trained-models/*
