@@ -1,5 +1,13 @@
-# the target:
-# http://129.10.161.241/mjpg/video.mjpg
+"""
+This is a script that periodically takes a screenshot/captures a frame from a live video camera feed of the 
+Northeastern student center. 
+It automatically crops out the timestamp information included on the bottom of the video camera feed.
+
+The dependencies for this program are in `scraper_requirements.txt`, and this program can be run as
+`python videoscraper.py DELAY **DURATION`
+where DELAY is the minutes (int) to wait taking each frame and DURATION should the timedelta kwags (ie days=10)
+to run the program for
+"""
 
 CAMERA_URL = 'http://129.10.161.241/mjpg/video.mjpg'
 

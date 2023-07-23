@@ -1,5 +1,6 @@
 env/
 frames/
 *.log
-deeplearning/protoc/*
-deeplearning/workspace/pre-trained-models/*
+TensorFlow/models
+TensorFlow/workspace/head_detector/pre-trained-models
+frames.zip
