@@ -53,4 +53,3 @@ This is very much as introductory glance at the power of using this data process
 Alternatively, you can skip steps 0-4 and just use the model located at `TensorFlow\workspace\head_detector\exported-models\head_detector\saved_model`, which is the export of the model I trained myself
 
 Note: I found that running the `./crop.ipynb` notebook is useful before labeling data as the raw screenshot taken by the video scraper include very pixelated heads in the distance which may confuse the detector. Although we are only looking at a smaller subset of the image, we can still analyze the overall busyness of the student center by comparing the relative amount of people in the images.
-
