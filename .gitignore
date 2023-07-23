@@ -3,3 +3,4 @@ frames/
 *.log
 TensorFlow/models
 TensorFlow/workspace/head_detector/pre-trained-models
+frames.zip
