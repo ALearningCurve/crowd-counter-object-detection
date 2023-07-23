@@ -1,18 +1,18 @@
 # About
-![example detection 1](exampleImages/example1.png) ![example detection 2](exampleImages/example2.png) ![example detection 3](exampleImages/example3.png)
+![example detection 1](ExampleImages/example1.png) ![example detection 2](ExampleImages/example2.png) ![example detection 3](ExampleImages/example3.png)
 
 Are you curious about when the Northeastern student center is the busiest? Well that is what I am to discover in this project. 
-Using a public webcam in the student center ([see here for yourself]('http://129.10.161.241/mjpg/video.mjpg')), I aim to capture a frame of what the webcam sees (see `./videoscraper.py`),
+Using a public webcam in the student center ([see here for yourself](http://129.10.161.241/mjpg/video.mjpg)), I aim to capture a frame of what the webcam sees (see `./videoscraper.py`),
 and then train an object detection model to count the number of heads. Interestingly, we have to train our own object detection model as the angle and quality of the
 webcam is very different compared to other training datasets. For that reason, I trained the model to recognize the heads of people in the student center as often people are sitting or talking with others so their bodies are obscured, but their heads are not!
 
 ## Results
 ### Analysis Results
 #### Detections by time of week
-![plot of detections over a week](exampleImages/wholeWeek.png)
+![plot of detections over a week](ExampleImages/wholeWeek.png)
 
 #### Detections by hour of the day
-![plot of detections by hour of day](exampleImages/byHour.png)
+![plot of detections by hour of day](ExampleImages/byHour.png)
 
 #### Interpretations
 Here we can clearly see that the detections are highest during the weekdays, which makes sense since people often go to the student center after class. Additionally, there is often spikes around breakfast, lunch, and dinner time (ie 9am, 12pm, and 5pm) which makes sense since the student center has restaurants in it. It also could be due to the fact that summer class sections start/end around that time (this data was collected in the summer), so these peaks could change during fall and spring when the class schedule differs.
@@ -24,7 +24,7 @@ In all, from both theses plots we can tell that the least crowded times to go to
 Note: these result plots and the example detections above are generated in `./run_and_evaluate_detection.ipynb`.
 
 ### Detector Results
-![TensorBoard of the model](exampleImages/modelTrainInfo.png)
+![TensorBoard of the model](ExampleImages/modelTrainInfo.png)
 In training the model I was able to get a final loss of about .10, which I think is pretty good considering how highly compressed/pixelated the webcam data is and how the model was also only trained with about 50 images. I think one thing that really helped increase the model accuracy was training the model to detect heads, rather than a full person, as this lets it be more flexible in detecting people when the student center is super busy or when people are sitting and the only thing the webcam sees is their heads. Additionally, another cool thing I found when training the model was the importance of including images with no people in it during the training in addition to those with people. During my first trains of the model, I didn't include such images, and the models ended up with a lot of false positives at night (when there are no people in the student center), but including fully representative data was super useful to improving the accuracy of the model.
 
 ## Future Considerations
