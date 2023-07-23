@@ -1,0 +1,26 @@
+<annotation>
+	<folder>images</folder>
+	<filename>2023_07_18__00_29.jpg</filename>
+	<path>C:\Users\willw\OneDrive\Documents\GitHub\Personal\crowd-counter\TensorFlow\workspace\head_detector\images\2023_07_18__00_29.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>640</width>
+		<height>460</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>head</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>215</xmin>
+			<ymin>383</ymin>
+			<xmax>241</xmax>
+			<ymax>409</ymax>
+		</bndbox>
+	</object>
+</annotation>
